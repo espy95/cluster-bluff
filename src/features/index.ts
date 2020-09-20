@@ -1,3 +1,7 @@
+export { Amount } from './beads/Amount'
+export { Beads } from './beads/Beads'
+export { Bead } from './beads/Bead'
 export { Board } from './board/Board'
 export { BoardSquare } from './board/BoardSquare'
 export { HeaderBar } from './headerBar/HeaderBar'
+export { Player } from './player/Player'

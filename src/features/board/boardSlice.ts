@@ -1,11 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppThunk, RootState } from '../../app/store'
-
-enum BoardSizes {
-  'Small' = 3,
-  'Medium' = 6,
-  'Large' = 12,
-}
+import { BOARD_SIZES } from '../../utils/constants'
 
 interface BoardState {
   square: SquareType
@@ -14,7 +9,7 @@ interface BoardState {
 
 const initialState: BoardState = {
   square: {},
-  size: 'Small',
+  size: 'Medium',
 }
 
 export const boardSlice = createSlice({
@@ -28,14 +23,14 @@ export const boardSlice = createSlice({
     },
     setBoardSize: (state, action: PayloadAction<BoardType>) => {
       state.size = action.payload
-      state.square = {}
+      state.square = initialState.square
     },
   },
 })
 
 export const { setSquareState, setBoardSize } = boardSlice.actions
 
-export const getBoardSize = ({ board }: RootState) => BoardSizes[board.size]
+export const getBoardSize = ({ board }: RootState) => BOARD_SIZES[board.size]
 export const getBoardType = ({ board }: RootState) => board.size
 export const getSquareState = (square: number) => ({ board }: RootState) => board.square[square]
 

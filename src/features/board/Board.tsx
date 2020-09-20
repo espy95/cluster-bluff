@@ -1,26 +1,27 @@
 import React from 'react'
-import { Grid, Paper, Typography } from '@material-ui/core'
+import { Grid, Paper } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { useSelector } from 'react-redux'
 import { getBoardSize } from './boardSlice'
 import { BoardSquare } from './BoardSquare'
+import { SQUARE_SIZE } from '../../utils/constants'
+
+interface StyledProps {
+  size: number
+}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
-    },
-    square: {
-      border: '1px solid',
-      textAlign: 'center',
-      width: theme.spacing(4),
-      height: theme.spacing(4),
+      width: ({ size }: StyledProps) => size * (SQUARE_SIZE + 2),
     },
   })
 )
 
 export const Board = () => {
-  const classes = useStyles()
   const size = useSelector(getBoardSize)
+  const classes = useStyles({ size })
+
   const generateGrid = (size: number): number[][] => {
     const grid: number[][] = []
     for (let i = 0; i < size; i++) {
@@ -31,6 +32,7 @@ export const Board = () => {
     }
     return grid
   }
+
   return (
     <Paper className={classes.paper}>
       {generateGrid(size).map((row, index) => (
