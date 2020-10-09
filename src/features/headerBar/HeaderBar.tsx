@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import { AppBar, Toolbar, Typography, IconButton, MenuItem, Menu } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import { useDispatch, useSelector } from 'react-redux'
-import { setBoardSize, getBoardType } from '../board/boardSlice'
+import { setBoardSize } from '../board/boardSlice'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme: Theme) =>
 export const HeaderBar = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
-  const boardSize = useSelector(getBoardType)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
@@ -50,11 +49,9 @@ export const HeaderBar = () => {
         >
           <MenuIcon />
         </IconButton>
-        <Typography>{boardSize}</Typography>
         <Menu id='menu-appbar' anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
           <MenuItem onClick={() => handleClick('Small')}>Small</MenuItem>
           <MenuItem onClick={() => handleClick('Medium')}>Medium</MenuItem>
-          <MenuItem onClick={() => handleClick('Large')}>Large</MenuItem>
         </Menu>
       </Toolbar>
     </AppBar>

@@ -1,10 +1,16 @@
 import React from 'react'
 import { ThemeProvider } from '@material-ui/core/styles'
-import { Beads, Board, HeaderBar, Player } from '../features'
+import { BeadsSidebar, Board, HeaderBar, Player } from '../features'
 import theme from './theme'
 import { Grid } from '@material-ui/core'
+import { setBoardSize } from '../features/board/boardSlice'
+import { useDispatch } from 'react-redux'
 
 const App = () => {
+  const dispatch = useDispatch()
+  React.useEffect(() => {
+    dispatch(setBoardSize('Small'))
+  }, [dispatch])
   return (
     <ThemeProvider theme={theme}>
       <HeaderBar />
@@ -15,7 +21,7 @@ const App = () => {
         <Grid item>
           <Grid container spacing={1}>
             <Grid item>
-              <Beads />
+              <BeadsSidebar />
             </Grid>
             <Grid item>
               <Board />

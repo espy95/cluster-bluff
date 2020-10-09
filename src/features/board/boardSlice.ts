@@ -1,37 +1,80 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AppThunk, RootState } from '../../app/store'
+import { useDispatch } from 'react-redux'
+import { RootState } from '../../app/store'
 import { BOARD_SIZES } from '../../utils/constants'
 
 interface BoardState {
-  square: SquareType
-  size: BoardType
+  squares: SquareType
+  size: number
 }
 
 const initialState: BoardState = {
-  square: {},
-  size: 'Medium',
+  squares: [],
+  size: BOARD_SIZES.Small,
+}
+
+interface SquareStateAction {
+  id: GridType
+  selectedColor: BeadType
+}
+
+const checkSquareState = (id: GridType) => ({ board }: RootState) => {
+  const dispatch = useDispatch()
+  const { row, col } = id
+  if (board.squares[row][col]) {
+    if (
+      row > 0 &&
+      col > 0 &&
+      board.squares[row - 1][col] !== 'none' &&
+      board.squares[row][col - 1] !== 'none'
+    ) {
+      // const newSquareState = {id: id, selectedColor: board.squares[row][col] + 'Flipped'}
+      dispatch(flipSquare(id))
+    }
+  }
 }
 
 export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
-    setSquareState: (state, action: PayloadAction<number>) => {
-      state.square[action.payload]
-        ? (state.square[action.payload] += 1)
-        : (state.square[action.payload] = 1)
+    setSquareState: (state, action: PayloadAction<SquareStateAction>) => {
+      const { id, selectedColor } = action.payload
+      state.squares[id.row][id.col] = selectedColor
+      checkSquareState(id)
+    },
+    flipSquare: (state, action: PayloadAction<GridType>) => {
+      const {row, col} = action.payload
+      state.squares[row][col] += 'Flipped'
     },
     setBoardSize: (state, action: PayloadAction<BoardType>) => {
-      state.size = action.payload
-      state.square = initialState.square
+      state.size = BOARD_SIZES[action.payload]
+      const newSquares: SquareType = []
+      for (let row = 0; row < BOARD_SIZES[action.payload]; row++) {
+        newSquares.push([])
+        for (let col = 0; col < BOARD_SIZES[action.payload]; col++) {
+          newSquares[row].push('none')
+        }
+      }
+      state.squares = newSquares
     },
   },
 })
 
-export const { setSquareState, setBoardSize } = boardSlice.actions
+export const { setSquareState, flipSquare, setBoardSize } = boardSlice.actions
 
-export const getBoardSize = ({ board }: RootState) => BOARD_SIZES[board.size]
-export const getBoardType = ({ board }: RootState) => board.size
-export const getSquareState = (square: number) => ({ board }: RootState) => board.square[square]
+export const getBoardSize = ({ board }: RootState) => board.size
+export const getBoardGrid = ({ board }: RootState) => {
+  const grid: number[][] = []
+  for (let i = 0; i < board.size; i++) {
+    grid.push([])
+    for (let j = 0; j < board.size; j++) {
+      grid[i].push(j + 1 + i * board.size)
+    }
+  }
+  return grid
+}
+export const getSquareState = (id: GridType) => ({ board }: RootState) =>
+  board.squares.length > 0 ? board.squares[id.row][id.col] : 'none'
 
 export default boardSlice.reducer

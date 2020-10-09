@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AppThunk, RootState } from '../../app/store'
+import { createSlice } from '@reduxjs/toolkit'
+import { RootState } from '../../app/store'
 import { setBoardSize, setSquareState } from '../board/boardSlice'
 import theme from '../../app/theme'
 
@@ -10,7 +10,7 @@ interface PlayerState {
 
 const initialState: PlayerState = {
   turn: 'Player 1',
-  color: theme.palette.secondary.light,
+  color: theme.palette.secondary.main,
 }
 
 export const playerSlice = createSlice({
@@ -26,10 +26,10 @@ export const playerSlice = createSlice({
       .addCase(setSquareState, (state, action) => {
         if (state.turn === 'Player 1') {
           state.turn = 'Player 2'
-          state.color = theme.palette.primary.light
+          state.color = theme.palette.primary.main
         } else {
           state.turn = 'Player 1'
-          state.color = theme.palette.secondary.light
+          state.color = theme.palette.secondary.main
         }
       })
   },

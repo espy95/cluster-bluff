@@ -1,4 +1,5 @@
-type BoardType = 'Small' | 'Medium' | 'Large'
-type BeadType = 'Red' | 'Blue' | 'Green'
+type BoardType = 'Small' | 'Medium'
+type BeadType = 'Red' | 'RedFlipped' | 'Blue' | 'BlueFlipped' | 'Green' | 'GreenFlipped' | 'none'
 type AmountType = {[key: string]: number}
-type SquareType = {[key: number]: number}
+type GridType = {row: number, col: number}
+type SquareType = BeadType[][]

@@ -4,44 +4,56 @@ import { setBoardSize, setSquareState } from '../board/boardSlice'
 import { BEADS, BOARD_SIZES } from '../../utils/constants'
 
 interface BeadsState {
-  amount: AmountType
-  selected: BeadType
+  amounts: AmountType
+  selectedColor: BeadType
 }
 
 const initialState: BeadsState = {
-  amount: {
-    'Red': BOARD_SIZES.Small,
-    'Blue': BOARD_SIZES.Small,
-    'Green': BOARD_SIZES.Small
-  },
-  selected: 'Red'
+  amounts: {},
+  selectedColor: 'Red',
 }
 
 export const beadsSlice = createSlice({
   name: 'beads',
   initialState,
   reducers: {
-    selectBead: (state, action: PayloadAction<BeadType>) => {
-      state.selected = action.payload
+    selectColor: (state, action: PayloadAction<BeadType>) => {
+      state.selectedColor = action.payload
     },
   },
   extraReducers: builder => {
     builder
       .addCase(setBoardSize, (state, action) => {
         BEADS.map(bead => {
-          state.amount[bead] = BOARD_SIZES[action.payload]
+          state.amounts[bead] = Math.floor(BOARD_SIZES[action.payload] * 0.75)
         })
-        state.selected = initialState.selected
+        state.selectedColor = initialState.selectedColor
       })
       .addCase(setSquareState, (state, action) => {
-        state.amount[state.selected] -= 1
+        state.amounts[state.selectedColor] -= 1
+        if (state.amounts[state.selectedColor] === 0) {
+          BEADS.map(bead => {
+            if (state.amounts[state.selectedColor] === 0 && state.amounts[bead] > 0) {
+              state.selectedColor = bead
+            }
+          })
+        }
       })
   },
 })
 
-export const { selectBead } = beadsSlice.actions
+export const { selectColor } = beadsSlice.actions
 
-export const getSelectedBead = ({ beads }: RootState) => beads.selected
-export const getBeadAmount = (bead: BeadType) => ({ beads }: RootState) => beads.amount[bead]
+export const getSelectedColor = ({ beads }: RootState) => beads.selectedColor
+export const getBeadAmount = ({ beads }: RootState) => beads.amounts
+export const getBeadsSidebar = ({ beads }: RootState) => {
+  return (Object.entries(beads.amounts) as [BeadType, number][]).reduce(
+    (result: BeadType[], entity: [BeadType, number]) => {
+      result.push(...Array(entity[1]).fill(entity[0]))
+      return result
+    },
+    []
+  )
+}
 
 export default beadsSlice.reducer

@@ -1,5 +1,4 @@
-export { Amount } from './beads/Amount'
-export { Beads } from './beads/Beads'
+export { BeadsSidebar } from './beads/BeadsSidebar'
 export { Bead } from './beads/Bead'
 export { Board } from './board/Board'
 export { BoardSquare } from './board/BoardSquare'
