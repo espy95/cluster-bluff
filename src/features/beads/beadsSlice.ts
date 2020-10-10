@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AppThunk, RootState } from '../../app/store'
+import { RootState } from '../../app/store'
 import { setBoardSize, setSquareState } from '../board/boardSlice'
-import { BEADS, BOARD_SIZES } from '../../utils/constants'
+import { BEADS, BEADS_AMOUNT } from '../../utils/constants'
 
 interface BeadsState {
   amounts: AmountType
@@ -24,15 +24,15 @@ export const beadsSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(setBoardSize, (state, action) => {
-        BEADS.map(bead => {
-          state.amounts[bead] = Math.floor(BOARD_SIZES[action.payload] * 0.75)
+        BEADS.forEach(bead => {
+          state.amounts[bead] = BEADS_AMOUNT[action.payload]
         })
         state.selectedColor = initialState.selectedColor
       })
       .addCase(setSquareState, (state, action) => {
         state.amounts[state.selectedColor] -= 1
         if (state.amounts[state.selectedColor] === 0) {
-          BEADS.map(bead => {
+          BEADS.forEach(bead => {
             if (state.amounts[state.selectedColor] === 0 && state.amounts[bead] > 0) {
               state.selectedColor = bead
             }

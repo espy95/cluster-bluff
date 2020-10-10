@@ -5,22 +5,27 @@ import { useSelector } from 'react-redux'
 import { getBoardGrid, getBoardSize } from './boardSlice'
 import { BoardSquare } from './BoardSquare'
 import { SQUARE_SIZE } from '../../utils/constants'
+import { getPlayerColor } from '../player/playerSlice'
 
 interface StyledProps {
   size: number
+  color: string
 }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
       width: ({ size }: StyledProps) => size * (SQUARE_SIZE + 2),
+      border: ({ color }: StyledProps) => `solid 2px ${color}`,
+      borderRadius: theme.spacing(1),
     },
   })
 )
 
 export const Board = React.memo(() => {
   const size = useSelector(getBoardSize)
-  const classes = useStyles({ size })
+  const color = useSelector(getPlayerColor)
+  const classes = useStyles({ size, color })
   const grid = useSelector(getBoardGrid)
 
   return (

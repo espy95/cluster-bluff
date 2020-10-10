@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 import { RootState } from '../../app/store'
-import { BOARD_SIZES } from '../../utils/constants'
+import { BOARD_SIZES, DIRECTIONS, FLIPPED_BEADS } from '../../utils/constants'
 
 interface BoardState {
   squares: SquareType
@@ -28,7 +28,6 @@ const checkSquareState = (id: GridType) => ({ board }: RootState) => {
       board.squares[row - 1][col] !== 'none' &&
       board.squares[row][col - 1] !== 'none'
     ) {
-      // const newSquareState = {id: id, selectedColor: board.squares[row][col] + 'Flipped'}
       dispatch(flipSquare(id))
     }
   }
@@ -44,7 +43,7 @@ export const boardSlice = createSlice({
       checkSquareState(id)
     },
     flipSquare: (state, action: PayloadAction<GridType>) => {
-      const {row, col} = action.payload
+      const { row, col } = action.payload
       state.squares[row][col] += 'Flipped'
     },
     setBoardSize: (state, action: PayloadAction<BoardType>) => {
@@ -74,7 +73,22 @@ export const getBoardGrid = ({ board }: RootState) => {
   }
   return grid
 }
-export const getSquareState = (id: GridType) => ({ board }: RootState) =>
-  board.squares.length > 0 ? board.squares[id.row][id.col] : 'none'
+
+const isValid = ({ row, col }: GridType, size: number): boolean =>
+  row >= 0 && col >= 0 && row < size && col < size
+
+const isOpen = (board: BoardState, id: GridType): boolean =>
+  DIRECTIONS.reduce((result: boolean, d: GridType) => {
+    const next = { row: d.row + id.row, col: d.col + id.col }
+    if (isValid(next, board.size) && board.squares[next.row][next.col] === 'none') result = true
+    return result
+  }, false)
+
+export const getSquareState = (id: GridType) => ({ board }: RootState): BeadType =>
+  board.squares.length > 0
+    ? isOpen(board, id)
+      ? board.squares[id.row][id.col]
+      : FLIPPED_BEADS[board.squares[id.row][id.col]]
+    : 'none'
 
 export default boardSlice.reducer

@@ -1,8 +1,8 @@
 import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import { AppBar, Toolbar, Typography, IconButton, MenuItem, Menu } from '@material-ui/core'
+import { AppBar, Toolbar, IconButton, MenuItem, Menu } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { setBoardSize } from '../board/boardSlice'
 
 const useStyles = makeStyles((theme: Theme) =>

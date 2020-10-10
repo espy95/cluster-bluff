@@ -36,5 +36,6 @@ export const playerSlice = createSlice({
 })
 
 export const getPlayer = ({ player }: RootState) => player
+export const getPlayerColor = ({ player }: RootState) => player.color
 
 export default playerSlice.reducer

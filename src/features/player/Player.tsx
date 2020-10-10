@@ -1,7 +1,7 @@
 import React from 'react'
-import { Grid, Paper, Typography } from '@material-ui/core'
+import { Typography } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { getPlayer } from './playerSlice'
 
 interface StyledProps {

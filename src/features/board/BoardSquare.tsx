@@ -3,7 +3,6 @@ import { Button } from '@material-ui/core'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSquareState, setSquareState } from './boardSlice'
-import { getPlayer } from '../player/playerSlice'
 import { BEAD, SQUARE_SIZE } from '../../utils/constants'
 import { Bead } from '../beads/Bead'
 import { getBeadAmount, getSelectedColor } from '../beads/beadsSlice'
@@ -36,7 +35,6 @@ export const BoardSquare = React.memo((props: BoardSquareProps) => {
   const dispatch = useDispatch()
   const selectedColor = useSelector(getSelectedColor)
   const state = useSelector(getSquareState(id))
-  const { color } = useSelector(getPlayer)
   const classes = useStyles({ selectedColor })
   const beadAmount = useSelector(getBeadAmount)
 
